@@ -1,1 +1,31 @@
 #init docker-compose file
+
+version: '3.8'
+
+services:
+  isaac-ros:
+    build:
+      context: ./docker/isaac-ros
+      dockerfile: Dockerfile
+    container_name: isaac-ros
+    runtime: nvidia
+    gpus: all
+    environment:
+      - ACCEPT_EULA=Y
+      - PRIVACY_CONSENT=Y
+      - ROS_MASTER_URI=http://localhost:11311
+      - ROS_IP=127.0.0.1
+    ports:
+      - "11311:11311" # ROS master
+      - "8211:8211"   # isaac sim streaming
+    volumes:
+      - ~/docker/isaac-sim/cache/kit:/isaac-sim/kit/cache:rw
+      - ~/docker/isaac-sim/cache/ov:/root/.cache/ov:rw
+      - ~/docker/isaac-sim/cache/pip:/root/.cache/pip:rw
+      - ~/docker/isaac-sim/cache/glcache:/root/.cache/nvidia/GLCache:rw
+      - ~/docker/isaac-sim/cache/computecache:/root/.nv/ComputeCache:rw
+      - ~/docker/isaac-sim/logs:/root/.nvidia-omniverse/logs:rw
+      - ~/docker/isaac-sim/data:/root/.local/share/ov/data:rw
+      - ~/docker/isaac-sim/documents:/root/Documents:rw
+    network_mode: "host"
+    restart: always
