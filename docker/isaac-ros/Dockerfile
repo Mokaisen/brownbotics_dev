@@ -1,42 +1,36 @@
 # Use the NVIDIA Isaac Sim image as the base
 FROM nvcr.io/nvidia/isaac-sim:4.2.0
 
-# Set environment variables
-ENV DEBIAN_FRONTEND=noninteractive \
-    ROS_DISTRO=noetic
+# Set environment variables for non-interactive installation
+ENV DEBIAN_FRONTEND=noninteractive
 
-# Update and install prerequisites
+# Update and install prerequisites for ROS 2 Humble
 RUN apt-get update && apt-get install -y \
+    software-properties-common \
     curl \
     gnupg2 \
-    lsb-release \
-    software-properties-common \
-    && rm -rf /var/lib/apt/lists/*
+    lsb-release && \
+    rm -rf /var/lib/apt/lists/*
 
-# Add the ROS repository
-RUN sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list' && \
-    curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | apt-key add -
+# Add ROS 2 repository and keys
+RUN curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | apt-key add - && \
+    add-apt-repository "deb [arch=amd64] http://packages.ros.org/ros2/ubuntu $(lsb_release -cs) main"
 
-# Install ROS Noetic
+# Install ROS 2 Humble
 RUN apt-get update && apt-get install -y \
-    ros-noetic-desktop-full \
-    && rm -rf /var/lib/apt/lists/*
+    ros-humble-desktop \
+    python3-argcomplete && \
+    rm -rf /var/lib/apt/lists/*
 
-# Source ROS setup script on container startup
-RUN echo "source /opt/ros/$ROS_DISTRO/setup.bash" >> /root/.bashrc
+# Source ROS 2 setup script in the container
+RUN echo "source /opt/ros/humble/setup.bash" >> ~/.bashrc
 
-# Install ROS dependencies
-RUN apt-get update && apt-get install -y \
-    python3-rosdep \
-    python3-rosinstall \
-    python3-rosinstall-generator \
-    python3-wstool \
-    build-essential \
-    && rm -rf /var/lib/apt/lists/*
+# Ensure NVIDIA container runtime is set up correctly
+ENV NVIDIA_VISIBLE_DEVICES=all \
+    NVIDIA_DRIVER_CAPABILITIES=all
 
-# Initialize rosdep
-RUN rosdep init && rosdep update
+# Override the entrypoint with a shell to prevent automatic script execution
+ENTRYPOINT ["/bin/bash"]
 
 # Set default command to bash
-CMD ["/bin/bash"]
-
+# CMD ["/bin/bash"]
