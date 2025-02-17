@@ -1,0 +1,1 @@
+init file to allow the createion of new empty folders

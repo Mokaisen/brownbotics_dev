@@ -1,0 +1,8 @@
+[submodule "workspaces/isaac_sim_ws/src/ros2_robotiq_gripper"]
+	path = workspaces/isaac_sim_ws/src/ros2_robotiq_gripper
+	url = https://github.com/PickNikRobotics/ros2_robotiq_gripper.git
+	brach = humble
+[submodule "workspaces/isaac_sim_ws/src/serial"]
+	path = workspaces/isaac_sim_ws/src/serial
+	url = https://github.com/tylerjw/serial.git
+	branch = ros2

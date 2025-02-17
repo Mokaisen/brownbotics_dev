@@ -1,0 +1,1 @@
+Init file to allow the push of new empty folders

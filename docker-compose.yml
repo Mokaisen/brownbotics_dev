@@ -1,0 +1,29 @@
+version: '3.7'
+
+services:
+  isaac-ros:
+    build:
+      context: ./docker/isaac-ros
+      dockerfile: Dockerfile
+    container_name: isaac-ros
+    runtime: nvidia
+    environment:
+      - ACCEPT_EULA=Y
+      - PRIVACY_CONSENT=Y
+      - NVIDIA_DRIVER_CAPABILITIES=all
+      - NVIDIA_VISIBLE_DEVICES=all
+      - RMW_IMPLEMENTATION=rmw_fastrtps_cpp
+      - LD_LIBRARY_PATH=/isaac-sim/exts/omni.isaac.ros2_bridge/humble/lib:$LD_LIBRARY_PATH
+      - AMENT_PREFIX_PATH=/opt/ros/humble
+      - ROS_DISTRO=humble
+    volumes:
+      - ~/docker/isaac-sim/cache/kit:/isaac-sim/kit/cache:rw
+      - ~/docker/isaac-sim/cache/ov:/root/.cache/ov:rw
+      - ~/docker/isaac-sim/cache/pip:/root/.cache/pip:rw
+      - ~/docker/isaac-sim/cache/glcache:/root/.cache/nvidia/GLCache:rw
+      - ~/docker/isaac-sim/cache/computecache:/root/.nv/ComputeCache:rw
+      - ~/docker/isaac-sim/logs:/root/.nvidia-omniverse/logs:rw
+      - ~/docker/isaac-sim/data:/root/.local/share/ov/data:rw
+      - ~/docker/isaac-sim/documents:/root/Documents:rw
+      - ~/brownbotics_dev/workspaces:/isaac-sim/workspaces:rw
+    network_mode: "host"
