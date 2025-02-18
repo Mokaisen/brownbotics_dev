@@ -17,8 +17,8 @@ class TestROS2Bridge : public rclcpp::Node
     publisher_ = this->create_publisher<sensor_msgs::msg::JointState>("joint_command",10);
     timer_ = this->create_wall_timer(0.05s, std::bind(&TestROS2Bridge::timer_callback, this));
 
-    joint_state_.name = ['shoulder_pan_joint', 'shoulder_lift_joint', 'elbow_joint',
-          'wrist_1_joint', 'wrist_2_joint', 'wrist_3_joint'];
+    joint_state_.name = {"shoulder_pan_joint", "shoulder_lift_joint", "elbow_joint",
+      "wrist_1_joint", "wrist_2_joint", "wrist_3_joint"};
     
     num_joints_ = joint_state_.name.size();
     
@@ -70,5 +70,10 @@ int main(int argc, char ** argv)
   (void) argv;
 
   printf("hello world arm_move1 package\n");
+
+  rclcpp::init(argc, argv);
+  rclcpp::spin(std::make_shared<TestROS2Bridge>());
+  rclcpp::shutdown();
+
   return 0;
 }
