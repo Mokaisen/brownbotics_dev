@@ -29,6 +29,14 @@ RUN echo "source /opt/ros/humble/setup.bash" >> ~/.bashrc
 ENV NVIDIA_VISIBLE_DEVICES=all \
     NVIDIA_DRIVER_CAPABILITIES=all
 
+# add the installation of colcon and rosdep
+RUN apt-get update
+RUN apt install python3-colcon-common-extensions -y
+RUN apt install python3-rosdep -y && \
+    rosdep init && \
+    rosdep update
+
+
 # Override the entrypoint with a shell to prevent automatic script execution
 ENTRYPOINT ["/bin/bash"]
 
