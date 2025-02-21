@@ -18,21 +18,23 @@ class TestROS2Bridge : public rclcpp::Node
     timer_ = this->create_wall_timer(0.05s, std::bind(&TestROS2Bridge::timer_callback, this));
 
     joint_state_.name = {"shoulder_pan_joint", "shoulder_lift_joint", "elbow_joint",
-      "wrist_1_joint", "wrist_2_joint", "wrist_3_joint"};
+      "wrist_1_joint", "wrist_2_joint", "wrist_3_joint","finger_joint"};
     
     num_joints_ = joint_state_.name.size();
     
     //initialize joint positions
     joint_state_.position.resize(num_joints_, 0.0);
 
-    default_joints_ = {0.0, -1.16, -0.0, -2.3, -0.0, 1.6};
+    default_joints_ = {0.0, 0.0, -0.0, -0.0, -0.0, 0.0, 0.1};
 
     max_joints_.resize(num_joints_);
     min_joints_.resize(num_joints_);
 
     for (size_t i = 0; i < num_joints_; ++i) {
+      if(i == 0 || i == 6){
         max_joints_[i] = default_joints_[i] + 0.5;
         min_joints_[i] = default_joints_[i] - 0.5;
+      }
     }
 
     start_time_ = this->now().seconds();
