@@ -5,3 +5,4 @@ workspaces/isaac_sim_ws/install
 workspaces/isaac_sim_ws/build
 workspaces/isaac_sim_ws/log
 
+workspaces/isaac_sim_scene
