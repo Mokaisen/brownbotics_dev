@@ -6,3 +6,6 @@
 	path = workspaces/isaac_sim_ws/src/serial
 	url = https://github.com/tylerjw/serial.git
 	branch = ros2
+[submodule "docker/isaac-ros/IsaacLab"]
+	path = docker/isaac-ros/IsaacLab
+	url = ./docker/isaac-ros/IsaacLab/
