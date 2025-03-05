@@ -32,4 +32,13 @@ services:
       - ~/docker/isaac-sim/data:/root/.local/share/ov/data:rw
       - ~/docker/isaac-sim/documents:/root/Documents:rw
       - ~/brownbotics_dev/workspaces:/isaac-sim/workspaces:rw
+      - type: bind
+        source: docker/isaac-ros/IsaacLab/source
+        target: ${DOCKER_ISAACLAB_PATH}/source
+      - type: bind
+        source: docker/isaac-ros/IsaacLab/docs
+        target: ${DOCKER_ISAACLAB_PATH}/docs
+      - type: bind
+        source: docker/isaac-ros/IsaacLab/tools
+        target: ${DOCKER_ISAACLAB_PATH}/tools
     network_mode: "host"
