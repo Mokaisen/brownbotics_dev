@@ -8,4 +8,4 @@
 	branch = ros2
 [submodule "docker/isaac-ros/IsaacLab"]
 	path = docker/isaac-ros/IsaacLab
-	url = https://github.com/isaac-sim/IsaacLab.git
+	url = https://github.com/Mokaisen/IsaacLab.git
