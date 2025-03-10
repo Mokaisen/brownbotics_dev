@@ -9,28 +9,28 @@ from launch_ros.substitutions import FindPackageShare
 
 
 def generate_launch_description():
-    robot_description_content = Command(
-        [
-            PathJoinSubstitution([FindExecutable(name="xacro")]),
-            " ",
-            PathJoinSubstitution(
-                [FindPackageShare("ur5_isaac_simulation"), "urdf", "ur.urdf.xacro"]),
-            " ",
-            "safety_limits:=true",
-            " ",
-            "safety_pos_margin:=0.15",
-            " ",
-            "safety_k_position:=20",
-            " ",
-            "name:=",
-            "ur",
-            " ",
-            "ur_type:=ur5",
-            " ",
-            "tf_prefix:=",
-            "",
-        ]
-    )
+    # robot_description_content = Command(
+    #     [
+    #         PathJoinSubstitution([FindExecutable(name="xacro")]),
+    #         " ",
+    #         PathJoinSubstitution(
+    #             [FindPackageShare("ur5_isaac_simulation"), "urdf", "ur.urdf.xacro"]),
+    #         " ",
+    #         "safety_limits:=true",
+    #         " ",
+    #         "safety_pos_margin:=0.15",
+    #         " ",
+    #         "safety_k_position:=20",
+    #         " ",
+    #         "name:=",
+    #         "ur",
+    #         " ",
+    #         "ur_type:=ur5",
+    #         " ",
+    #         "tf_prefix:=",
+    #         "",
+    #     ]
+    # )
     # robot_description = {"robot_description": robot_description_content}
     # robot_state_publisher_node = Node(
     #     package="robot_state_publisher",
@@ -52,7 +52,7 @@ def generate_launch_description():
     # )
 
     ur5_traj_server = Node(
-        package='ur5_isaac_simulation',
+        package='brownbot_ik',
         name='ur5_controller',
         executable='ur5_controller'
     )

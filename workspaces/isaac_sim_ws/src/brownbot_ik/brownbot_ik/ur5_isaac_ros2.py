@@ -15,11 +15,11 @@ from tf2_ros.transform_listener import TransformListener
 from tf_transformations import euler_from_matrix
 from trajectory_msgs.msg import JointTrajectoryPoint
 
-from ur5_isaac_simulation.helper_functions import transformations
-from ur5_isaac_simulation.helper_functions.interactive_marker import \
+from brownbot_ik.helper_functions import transformations
+from brownbot_ik.helper_functions.interactive_marker import \
     InteractiveMarkerUR5
-from ur5_isaac_simulation.helper_functions.inv_kin import inverse_kinematics
-from ur5_isaac_simulation.helper_functions.load_ros_parameters import \
+from brownbot_ik.helper_functions.inv_kin import inverse_kinematics
+from brownbot_ik.helper_functions.load_ros_parameters import \
     get_ros_parameters
 
 #from .tkinter_gui import TkinterGui

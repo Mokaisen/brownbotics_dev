@@ -23,7 +23,7 @@ def get_ros_parameters(node_name):
     """
     # Get the parameters from the yaml file
     config_file = os.path.join(
-        get_package_share_directory("ur5_isaac_simulation"),
+        get_package_share_directory("brownbot_ik"),
         'config',
         'params.yaml'
     )

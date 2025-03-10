@@ -14,8 +14,8 @@ from rclpy.node import Node
 from rclpy.parameter import Parameter
 from sensor_msgs.msg import JointState
 
-from ur5_isaac_simulation.helper_functions import trajectory_check as tc
-from ur5_isaac_simulation.helper_functions.load_ros_parameters import \
+from brownbot_ik.helper_functions import trajectory_check as tc
+from brownbot_ik.helper_functions.load_ros_parameters import \
     get_ros_parameters
 
 
