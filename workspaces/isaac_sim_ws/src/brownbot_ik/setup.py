@@ -20,6 +20,12 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
+            # Action Servers
+            'ur5_controller = ur5_isaac_simulation.action_servers.ur5_controller:main',
+            'gripper_controller = ur5_isaac_simulation.action_servers.gripper_controller:main',
+
+            # Nodes
+            'ur5_isaac_ros2 = ur5_isaac_simulation.ur5_isaac_ros2:main'
         ],
     },
 )
