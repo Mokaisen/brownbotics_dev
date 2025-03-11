@@ -122,30 +122,34 @@ class UR5Isaac(Node):
 
     def trigger_callback(self, msg):
         self.get_logger().info('I heard: "%s"' % msg.data)
+        message_str = msg.data
+        values = message_str.split(',')
+        values_float = list(map(float, values))
         
         # now, i have to trigger the service to compute target goal of the prim
         
         # Request for the position
         self.req_pos.path = "/World/Cube"
         self.req_pos.attribute = "xformOp:translate"
-        self.future = self.cli_pos.call_async(self.req_pos)
-        rclpy.spin_until_future_complete(self, self.future)
-        result_pos = self.future
-        pos_value = result_pos.value
-        self.get_logger().info('Prim pos value: "%s"' % pos_value)
+        # self.future = self.cli_pos.call_async(self.req_pos)
+        # rclpy.spin_until_future_complete(self, self.future)
+        # result_pos = self.future
+        # pos_value = result_pos.value
+        # self.get_logger().info('Prim pos value: "%s"' % pos_value)
 
         # Request for the orientation
         self.req_pos.attribute = "xformOp:orient"
-        self.future = self.cli_pos.call_async(self.req_pos)
-        rclpy.spin_until_future_complete(self, self.future)
-        result_rot = self.future
-        rot_value = result_rot.value
-        self.get_logger().info('Prim rot value: "%s"' % rot_value)
+        # self.future = self.cli_pos.call_async(self.req_pos)
+        # rclpy.spin_until_future_complete(self, self.future)
+        # result_rot = self.future
+        # rot_value = result_rot.value
+        # self.get_logger().info('Prim rot value: "%s"' % rot_value)
 
         # from the information obtained from previous service we can compute the goal
-        #self.send_goal([0,0,0,0,0,0],
-        #                movement="slow",
-        #                inv_kin=True)
+        # [0.4,0.1,0.4,0,0,0],
+        self.send_goal(values_float,
+                       movement="slow",
+                       inv_kin=True)
 
     def send_goal(
         self,
