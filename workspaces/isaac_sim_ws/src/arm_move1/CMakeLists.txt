@@ -17,7 +17,7 @@ find_package(std_msgs REQUIRED)
 add_executable(arm_move1_node src/arm_move1_node.cpp)
 ament_target_dependencies(arm_move1_node rclcpp sensor_msgs)
 
-add_executable(brownbot_ik_seq_node src/brownbot_ik_seq_node.cpp)
+add_executable(brownbot_ik_seq_node src/brownbot_ik_seq.cpp)
 ament_target_dependencies(brownbot_ik_seq_node rclcpp sensor_msgs std_msgs)
 
 target_include_directories(arm_move1_node PUBLIC
