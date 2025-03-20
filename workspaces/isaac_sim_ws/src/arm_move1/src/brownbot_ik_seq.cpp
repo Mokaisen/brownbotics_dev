@@ -42,7 +42,7 @@ public:
 
     void topic_callback(const sensor_msgs::msg::JointState::SharedPtr msg){
         joint_states_now_ = msg->position;
-        joint_states_now_.assign(msg->position.begin(), msg->position.begin() + 6);
+        joint_states_now_.assign(msg->position.begin(), msg->position.begin() + 7);
 
     }   
 
