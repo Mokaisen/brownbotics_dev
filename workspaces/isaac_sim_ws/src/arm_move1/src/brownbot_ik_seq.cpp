@@ -32,11 +32,11 @@ public:
             "0,-0.69,0.06,0,-180,90",
             "close_gripper",
             "0,-0.69,0.2,0,-180,90",
-            "-0.6,0.0,0.06,0,-180,90",
+            "0.6,0.0,0.2,0,-180,90",
             "0,-0.69,0.2,0,-180,90",
             "0,-0.69,0.06,0,-180,90",
             "open_gripper",
-            "0,-0.69,0.2,0,-180,90"
+            "0,-0.69,0.4,0,-180,90"
         };
     }
 
@@ -68,26 +68,33 @@ public:
         //RCLCPP_INFO(this->get_logger(), "joint states prev: %s", vector_to_string(joint_states_prev_).c_str());
         
         std::string seq_step = "empty";
-        if(dot_product == 1.0 && seq_moves_.size()>0){
+        RCLCPP_INFO(this->get_logger(), "seq_moves 1: %s", vector_to_string(seq_moves_).c_str());
+        RCLCPP_INFO(this->get_logger(), "dot product 1: %f", dot_product);
+        RCLCPP_INFO(this->get_logger(), "seq_moves_size: %d", seq_moves_.size());
+        RCLCPP_INFO(this->get_logger(), "bool dot product: %d", dot_product == 1.0);
+
+        if((1.000 - std::abs(dot_product)) < 0.0000001 && seq_moves_.size()>0){
             
             seq_step = seq_moves_.front();
             seq_moves_.erase(seq_moves_.begin());
-            RCLCPP_INFO(this->get_logger(), "seq_moves: %s", vector_to_string(seq_moves_).c_str());
+            RCLCPP_INFO(this->get_logger(), "seq_moves 2: %s", vector_to_string(seq_moves_).c_str());
 
             if(seq_step == "close_gripper"){
                 auto msg_joints = sensor_msgs::msg::JointState();
                 msg_joints.name = {"shoulder_pan_joint", "shoulder_lift_joint", "elbow_joint",
                     "wrist_1_joint", "wrist_2_joint", "wrist_3_joint","finger_joint"};
                 msg_joints.position = joint_states_now_;
-                msg_joints.position.push_back(0.33);
+                msg_joints.position.at(6)=0.53;
                 pub_joints_->publish(msg_joints);
+                rclcpp::sleep_for(5s);
             }else if(seq_step == "open_gripper" ){
                 auto msg_joints = sensor_msgs::msg::JointState();
                 msg_joints.name = {"shoulder_pan_joint", "shoulder_lift_joint", "elbow_joint",
                     "wrist_1_joint", "wrist_2_joint", "wrist_3_joint","finger_joint"};
                 msg_joints.position = joint_states_now_;
-                msg_joints.position.push_back(0.0);
+                msg_joints.position.at(6) = 0.0;
                 pub_joints_->publish(msg_joints);
+                rclcpp::sleep_for(5s);
             }else{
                 //publish to the controller
                 auto msg_seq = std_msgs::msg::String();
