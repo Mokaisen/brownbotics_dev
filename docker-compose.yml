@@ -42,4 +42,7 @@ services:
       - type: bind
         source: ./docker/isaac-ros/IsaacLab/tools
         target: ${DOCKER_ISAACLAB_PATH}/tools
+      - type: bind
+        source: ./data
+        target: ${DOCKER_ISAACLAB_PATH}/logs
     network_mode: "host"
