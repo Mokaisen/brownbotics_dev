@@ -9,6 +9,7 @@ endif()
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(sensor_msgs REQUIRED)
+find_package(std_msgs REQUIRED)
 # uncomment the following section in order to fill in
 # further dependencies manually.
 # find_package(<dependency> REQUIRED)
@@ -16,12 +17,23 @@ find_package(sensor_msgs REQUIRED)
 add_executable(arm_move1_node src/arm_move1_node.cpp)
 ament_target_dependencies(arm_move1_node rclcpp sensor_msgs)
 
+add_executable(brownbot_ik_seq_node src/brownbot_ik_seq.cpp)
+ament_target_dependencies(brownbot_ik_seq_node rclcpp sensor_msgs std_msgs)
+
 target_include_directories(arm_move1_node PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>)
 target_compile_features(arm_move1_node PUBLIC c_std_99 cxx_std_17)  # Require C99 and C++17
 
 install(TARGETS arm_move1_node
+  DESTINATION lib/${PROJECT_NAME})
+
+target_include_directories(brownbot_ik_seq_node PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:include>)
+target_compile_features(brownbot_ik_seq_node PUBLIC c_std_99 cxx_std_17)  # Require C99 and C++17
+
+install(TARGETS brownbot_ik_seq_node
   DESTINATION lib/${PROJECT_NAME})
 
 if(BUILD_TESTING)
