@@ -9,3 +9,6 @@
 [submodule "docker/isaac-ros/IsaacLab"]
 	path = docker/isaac-ros/IsaacLab
 	url = https://github.com/Mokaisen/IsaacLab.git
+[submodule "docker/isaac-ros-v2/IsaacLab"]
+	path = docker/isaac-ros-v2/IsaacLab
+	url = git@github.com:Mokaisen/IsaacLab.git
