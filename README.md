@@ -1,10 +1,8 @@
-# brownbotics_dev
-Development repository for the robot cafe 
-
-New update for the readme file to test github behavior
+# brownbotics_dev environment
+Development repository for brownbot 
 
 
-# Install IsaacLab 
+# Install IsaacLab for isaac sim 4.2
 
 In order to install IsaacLab, some modification were needed it in the submodule. The version compatible with the isaac-sim container is the v1.4.1
 
@@ -43,3 +41,57 @@ EXTRAS_REQUIRE = {
 ```
 
 Once this is modified the container can be built successfully
+
+# Build containers 
+
+## Isaac-sim 4.2
+
+The dockefile, doing the corresponding set up for the container, is located in ./docker/isaac-ros/ 
+
+In order to build the previous dockerfile, we should use the following command 
+
+```
+docker-compose build isaac-ros 
+```
+
+or without cache
+
+```
+docker-compose build --no-cache isaac-ros 
+```
+
+Some of the dockerfile and docker compose configuration variables are organized in the .env file 
+
+## Isaac-sim 4.5
+
+The dockerfile for this container is in the ./docker/isaac-ros-v2/Dockerfile location
+
+This container can be built by running the following docker compose commands
+
+```
+docker compose build isaac-ros-v2
+```
+
+or without cache
+
+```
+docker compose build --no-cache isaac-ros-v2
+```
+
+The variables used in the docker compose file and the dockerfile are included in the .env.isaac4.5 file
+
+# Running the containers 
+
+## Isaac-sim 4.2
+
+```
+docker-compose run isaac-ros
+```
+
+## Isaac-sim 4.5
+
+```
+docker compose up -d isaac-ros-v2
+```
+
+Detach mode (-d) is required to avoid getting inside the container in the current terminal
