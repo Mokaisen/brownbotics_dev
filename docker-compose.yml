@@ -46,3 +46,29 @@ services:
         source: ./data/logs
         target: ${DOCKER_ISAACLAB_PATH}/logs
     network_mode: "host"
+  
+  isaac-ros-v2:
+    build:
+      context: ./docker/isaac-ros-v2
+      dockerfile: Dockerfile
+    container_name: isaac-ros-v2
+    runtime: nvidia
+    network_mode: "host"
+    environment:
+      - ACCEPT_EULA=Y
+      - PRIVACY_CONSENT=Y
+      - NVIDIA_DRIVER_CAPABILITIES=all
+      - NVIDIA_VISIBLE_DEVICES=all
+    volumes:
+      - ~/docker/isaac-sim/cache/kit:/isaac-sim/kit/cache:rw
+      - ~/docker/isaac-sim/cache/ov:/root/.cache/ov:rw
+      - ~/docker/isaac-sim/cache/pip:/root/.cache/pip:rw
+      - ~/docker/isaac-sim/cache/glcache:/root/.cache/nvidia/GLCache:rw
+      - ~/docker/isaac-sim/cache/computecache:/root/.nv/ComputeCache:rw
+      - ~/docker/isaac-sim/logs:/root/.nvidia-omniverse/logs:rw
+      - ~/docker/isaac-sim/data:/root/.local/share/ov/data:rw
+      - ~/docker/isaac-sim/documents:/root/Documents:rw
+    restart: "no" 
+    shm_size: "2g"
+    stdin_open: true
+    tty: true
