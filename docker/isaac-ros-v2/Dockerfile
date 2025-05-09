@@ -93,6 +93,9 @@ RUN echo "export ISAACLAB_PATH=${ISAACLAB_PATH}" >> ${HOME}/.bashrc && \
 # this is the default directory when the container is run
 WORKDIR ${ISAACLAB_PATH}
 
+# Reinstall torch and torchvision for cuda 12.8 for gpu series 50
+RUN ${ISAACLAB_PATH}/isaaclab.sh -p -m pip install --upgrade --pre torch torchvision --index-url https://download.pytorch.org/whl/nightly/cu128
+
 # Set the default entrypoint to bash
 #ENTRYPOINT ["bash"]
 ENTRYPOINT ["/bin/bash"]
