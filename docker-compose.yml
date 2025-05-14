@@ -77,6 +77,7 @@ services:
       - ~/docker/isaac-sim/logs:/root/.nvidia-omniverse/logs:rw
       - ~/docker/isaac-sim/data:/root/.local/share/ov/data:rw
       - ~/docker/isaac-sim/documents:/root/Documents:rw
+      - ~/brownbotics_dev/workspaces:/isaac-sim/workspaces:rw
         # This overlay allows changes on the local files to
         # be reflected within the container immediately
       - type: bind
