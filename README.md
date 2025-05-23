@@ -1,6 +1,17 @@
 # brownbotics_dev environment
 Development repository for brownbot 
 
+# Preliminary results
+
+Robot has learnt by itself to reach the object but it is struglling to grasp it. The development was done using isaac sim to create the robot and isaac lab for training the robot using PPO algorithm for reinforcement learning.
+
+Training:
+
+![Training gif](media/training.gif)
+
+Result:
+
+![Result gif](media/result.gif)
 
 # Install IsaacLab for isaac sim 4.2
 
