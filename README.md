@@ -13,6 +13,10 @@ Result:
 
 ![Result gif](media/result.gif)
 
+Inverse Kinematics using ROS2 Humble:
+
+![Result gif](media/normal_ik_seq.gif)
+
 # Install IsaacLab for isaac sim 4.2
 
 In order to install IsaacLab, some modification were needed it in the submodule. The version compatible with the isaac-sim container is the v1.4.1
@@ -106,3 +110,43 @@ docker compose up -d isaac-ros-v2
 ```
 
 Detach mode (-d) is required to avoid getting inside the container in the current terminal
+
+# Execute Normal Inverse Kinematics ROS2 Package 
+
+This solution is based in the package from: https://github.com/caiobarrosv/ur5_isaac_simulation 
+
+Currently, it is working only in the Isaac-sim 4.2 container which has ROS2 Humble installed
+
+The purpose of doing this, is to verify that the robot is able to reach the object and grasp it. Then, we will be sure that the reinforcement learning approach will work:
+
+![Result gif](media/normal_ik_seq.gif)
+
+Then, before runnning any of the nodes, the brownbotics workspace needs to be source with the following command: 
+
+```
+echo 'export LD_LIBRARY_PATH=$(echo $LD_LIBRARY_PATH | sed "s|/isaac-sim/exts/omni.isaac.ros2_bridge/humble/lib:||g")' >> ~/.bashrc
+echo 'source /isaac-sim/workspaces/isaac_sim_ws/install/setup.bash' >> ~/.bashrc  
+```
+
+Install some ROS2 dependencies: 
+
+```
+sudo apt update
+
+sudo apt install ros-humble-vision-msgs ros-humble-control-msgs   ros-humble-tf-transformations ros-humble-joint-state-publisher   ros-humble-xacro
+```
+
+And the following needs to be executed by terminal: 
+
+```
+ros2 launch brownbot_ik ur5_isaac_ros2.launch.py
+```
+
+```
+ros2 run brownbot_ik ur5_isaac_ros2
+```
+
+```
+ros2 run arm_move1 brownbot_ik_seq_node
+```
+
