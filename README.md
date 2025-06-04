@@ -11,7 +11,9 @@ Training:
 
 Result:
 
-![Result gif](media/result.gif)
+![Result gif](media/Result_0604.png)
+
+[▶️ Watch the full video on YouTube](https://www.youtube.com/watch?v=32d2sBXdfVs)
 
 Inverse Kinematics using ROS2 Humble:
 
