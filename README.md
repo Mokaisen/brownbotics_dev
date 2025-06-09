@@ -3,7 +3,7 @@ Development repository for brownbot
 
 # Preliminary results
 
-Robot has learnt by itself to reach the object but it is struglling to grasp it. The development was done using isaac sim to create the robot and isaac lab for training the robot using PPO algorithm for reinforcement learning.
+Robot has learnt by itself to reach the object and grasp the object, but it still is not reaching the final goal location. The development was done using isaac sim to create the robot and isaac lab for training the robot using PPO algorithm for reinforcement learning.
 
 Training:
 
@@ -13,11 +13,27 @@ Result:
 
 ![Result gif](media/Result_0604.png)
 
-[▶️ Watch the full video on YouTube](https://www.youtube.com/watch?v=32d2sBXdfVs)
+[▶️ Watch the full video on YouTube](https://youtu.be/WbFIj5-GTcE?si=nzJ7Jho9p_qT85q7)
 
 Inverse Kinematics using ROS2 Humble:
 
 ![Result gif](media/normal_ik_seq.gif)
+
+# Intermediate Behaviors During Tuning
+
+During the adjustment of the reward terms, we notice two interesting behaviors that can be seen in the following youtube links: 
+
+## Push the object
+
+Using a weight of 10 in the contact reward of the gripper, the robots learnt to push the object to increase the contact with the object: 
+
+[▶️ Video of the pushing behavior](https://www.youtube.com/watch?v=fsddJXXTWxI)
+
+## Push back and forth  
+
+Reducing the weight of the contact sensor to 5 makes the robot learnt to push the object back and forth: 
+
+[▶️ Video of the robot pushing back and forth the object](https://youtu.be/f3k7dY1wAUk?si=bCvuTKZ2xZR0PHGU)
 
 # Install IsaacLab for isaac sim 4.2
 
@@ -152,3 +168,23 @@ ros2 run brownbot_ik ur5_isaac_ros2
 ros2 run arm_move1 brownbot_ik_seq_node
 ```
 
+# Train and Play in Isaac Lab 4.5
+
+The robot package needs to be installed: 
+
+```
+cd /isaac-sim/workspaces/brownbot_rl
+python -m pip install -e source/brownbot_rl/ 
+```
+
+Once it is installed, the training can be executed, in the same previous location 
+
+```
+python scripts/skrl/train.py --task Template-Brownbot-Rl-v0 --headless --num_envs 4096
+```
+
+Testing the policy: 
+
+```
+python scripts/skrl/train.py --task Template-Brownbot-Rl-v0 --livestream 2 --num_envs 6 --checkpoint logs/skrl/brownbot_lift/{date_experiment}_{name_experiment}
+```
