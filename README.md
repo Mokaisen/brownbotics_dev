@@ -13,7 +13,7 @@ Result:
 
 ![Result gif](media/Result_0604.png)
 
-[▶️ Watch the full video on YouTube](https://youtu.be/WbFIj5-GTcE?si=nzJ7Jho9p_qT85q7)
+[▶️ Watch the full video on YouTube](https://youtu.be/3tgXfzUmTXs?si=u0gmlV4QASLmRxdE)
 
 Inverse Kinematics using ROS2 Humble:
 
