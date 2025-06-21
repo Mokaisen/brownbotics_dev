@@ -38,36 +38,51 @@ class BrownbotPolicy(PolicyController):
             "/isaac-sim/workspaces/brownbot_rl/logs/skrl/brownbot_lift/2025-06-13_22-21-29_ppo_torch_rewardsToOne/params/env.yaml",
         )
         self._action_scale = 0.2
-        self._previous_action = np.zeros(12)
+        self._previous_action = np.zeros(7)
         self._policy_counter = 0
 
-    def _compute_observation(self, command):
+    def _compute_observation(self):
         """
         Compute the observation vector for the policy
 
         Argument:
-        command (np.ndarray) -- the robot command (v_x, v_y, w_z)
 
         Returns:
         np.ndarray -- The observation vector.
 
         """
 
-        obs = np.zeros(48)
+        obs = np.zeros(39)
+
+        # Joint states
+        current_joint_pos = self.robot.get_joint_positions()
+        current_joint_vel = self.robot.get_joint_velocities()
+        obs[:13] = current_joint_pos - self.default_pos
+        obs[13:26] = current_joint_vel
+
+        # object position in robot root frame
+        # TODO how to access this position? 
+        obs[26:29] = [0,0,0]
+
+        # Object target pose
+        # TODO how to access the mdp.generated_commands
+        obs[29:32] = [0,0,0]
+
+        # previous action
+        obs[32:39] = self._previous_action
 
         return obs
 
-    def forward(self, dt, command):
+    def forward(self, dt):
         """
         Compute the desired torques and apply them to the articulation
 
         Argument:
         dt (float) -- Timestep update in the world.
-        command (np.ndarray) -- the robot command (v_x, v_y, w_z)
 
         """
         if self._policy_counter % self._decimation == 0:
-            obs = self._compute_observation(command)
+            obs = self._compute_observation()
             self.action = self._compute_action(obs)
             self._previous_action = self.action.copy()
 
