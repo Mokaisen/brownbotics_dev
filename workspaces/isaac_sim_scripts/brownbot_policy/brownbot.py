@@ -57,19 +57,19 @@ class BrownbotPolicy(PolicyController):
         # Joint states
         current_joint_pos = self.robot.get_joint_positions()
         current_joint_vel = self.robot.get_joint_velocities()
-        obs[:13] = current_joint_pos - self.default_pos
-        obs[13:26] = current_joint_vel
+        obs[:14] = current_joint_pos - self.default_pos
+        obs[14:28] = current_joint_vel
 
         # object position in robot root frame
         # TODO how to access this position? 
-        obs[26:29] = [0,0,0]
+        obs[28:31] = [0,0,0]
 
         # Object target pose
         # TODO how to access the mdp.generated_commands
-        obs[29:32] = [0,0,0]
+        obs[31:38] = [0,0,0,0,0,0,0]
 
         # previous action
-        obs[32:39] = self._previous_action
+        obs[38:45] = self._previous_action
 
         return obs
 
