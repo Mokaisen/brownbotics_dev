@@ -1,15 +1,18 @@
 from isaacsim.examples.interactive.base_sample import BaseSample
 from isaacsim.core.api.objects import DynamicCuboid
 
-from . import BrownbotPolicy
+from isaacsim.examples.interactive.brownbot_policy.brownbot import BrownbotPolicy
+
+import numpy as np
+
 
 class BrownbotTransfer(BaseSample):
     def __init__(self) -> None:
         super().__init__()
         # TODO verify this information 
-        self._world_settings["stage_units_in_meters"] = 1.0
-        self._world_settings["physics_dt"] = 0.01
-        self._world_settings["rendering_dt"] = 2
+        # self._world_settings["stage_units_in_meters"] = 1.0
+        # self._world_settings["physics_dt"] = 0.01
+        # self._world_settings["rendering_dt"] = 2
 
     def setup_scene(self):
         # add the robot, the object, and the ground floor 

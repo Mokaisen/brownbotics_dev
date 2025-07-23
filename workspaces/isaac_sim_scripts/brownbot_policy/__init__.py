@@ -8,3 +8,6 @@
 #
 
 # NOTE: Import here your extension examples to be propagated to ISAAC SIM Extensions startup
+
+from isaacsim.examples.interactive.brownbot_policy.brownbot_transfer import BrownbotTransfer
+from isaacsim.examples.interactive.brownbot_policy.brownbot_extension import BrownbotExtension

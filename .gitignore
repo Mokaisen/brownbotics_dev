@@ -10,3 +10,5 @@ workspaces/isaac_sim_scene
 data/logs
 
 .vscode/
+
+**/__pycache__/
