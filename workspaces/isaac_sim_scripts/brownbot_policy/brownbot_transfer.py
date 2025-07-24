@@ -11,7 +11,7 @@ class BrownbotTransfer(BaseSample):
         super().__init__()
         # TODO verify this information 
         # self._world_settings["stage_units_in_meters"] = 1.0
-        # self._world_settings["physics_dt"] = 0.01
+        self._world_settings["physics_dt"] = 0.01
         # self._world_settings["rendering_dt"] = 2
 
     def setup_scene(self):

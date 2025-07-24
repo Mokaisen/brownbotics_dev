@@ -34,7 +34,7 @@ class BrownbotPolicy(PolicyController):
         super().__init__(name, prim_path, root_path, usd_path, position, orientation)
 
         self.load_policy(
-            "/isaac-sim/workspaces/brownbot_rl/logs/skrl/brownbot_lift/2025-06-13_22-21-29_ppo_torch_rewardsToOne/checkpoints/agent_72000.pt",
+            "/isaac-sim/workspaces/brownbot_rl/logs/skrl/brownbot_lift/2025-06-13_22-21-29_ppo_torch_rewardsToOne/checkpoints/policy_scripted.pt",
             "/isaac-sim/workspaces/brownbot_rl/logs/skrl/brownbot_lift/2025-06-13_22-21-29_ppo_torch_rewardsToOne/params/env.yaml",
         )
         self._action_scale = 0.2
@@ -52,7 +52,7 @@ class BrownbotPolicy(PolicyController):
 
         """
 
-        obs = np.zeros(39)
+        obs = np.zeros(45, dtype=np.float32)
 
         # Joint states
         current_joint_pos = self.robot.get_joint_positions()
@@ -62,11 +62,11 @@ class BrownbotPolicy(PolicyController):
 
         # object position in robot root frame
         # TODO how to access this position? 
-        obs[28:31] = [0,0,0]
+        obs[28:31] = [2,0,0]
 
         # Object target pose
         # TODO how to access the mdp.generated_commands
-        obs[31:38] = [0,0,0,0,0,0,0]
+        obs[31:38] = [0,0,2.5,0,0,0,0]
 
         # previous action
         obs[38:45] = self._previous_action
@@ -85,8 +85,15 @@ class BrownbotPolicy(PolicyController):
             obs = self._compute_observation()
             self.action = self._compute_action(obs)
             self._previous_action = self.action.copy()
+        
+        # print("shape self.action: ", self.action.shape)
+        # print("type self.action: ", type(self.action))
+        # print("type default_pose: ", type(self.default_pos))
+        # print("len self.default_pos: ", len(self.default_pos))
+        # Pad with zeros
+        padded_action = np.pad(self.action, (0, len(self.default_pos) - len(self.action)), mode="constant")
 
-        action = ArticulationAction(joint_positions=self.default_pos + (self.action * self._action_scale))
+        action = ArticulationAction(joint_positions=self.default_pos + (padded_action * self._action_scale))
         self.robot.apply_action(action)
 
         self._policy_counter += 1
