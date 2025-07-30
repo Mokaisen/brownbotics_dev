@@ -3,6 +3,7 @@ from typing import Optional
 import numpy as np
 from isaacsim.robot.policy.examples.controllers import PolicyController
 from isaacsim.core.utils.types import ArticulationAction
+import time
 
 class BrownbotPolicy(PolicyController):
 
@@ -40,8 +41,9 @@ class BrownbotPolicy(PolicyController):
         self._action_scale = 0.2
         self._previous_action = np.zeros(7)
         self._policy_counter = 0
+        self._obs_counter = 0
 
-    def _compute_observation(self):
+    def _compute_observation(self, cube_position:np.ndarray ):
         """
         Compute the observation vector for the policy
 
@@ -60,20 +62,27 @@ class BrownbotPolicy(PolicyController):
         obs[:14] = current_joint_pos - self.default_pos
         obs[14:28] = current_joint_vel
 
+        #print("current_joint_pos: ", current_joint_pos)
+        #print("default_pos: ", self.default_pos)
+        #print("obs[:14]: ", obs[:14])
+
         # object position in robot root frame
         # TODO how to access this position? 
-        obs[28:31] = [2,0,0]
+        obs[28:31] = cube_position 
+        #obs[28:31] = [4.2191e-01, -2.0915e-01, 4.5190e-02]
 
         # Object target pose
         # TODO how to access the mdp.generated_commands
-        obs[31:38] = [0,0,2.5,0,0,0,0]
+        # obs[31:38] = [0.5,0,0.4,0,0,0,0]
+        obs[31:38] = [5.5306e-01,  1.9388e-01,  2.8111e-01,  8.4452e-04,
+                      7.0711e-01, -2.8151e-04,  7.0711e-01]
 
         # previous action
         obs[38:45] = self._previous_action
 
         return obs
 
-    def forward(self, dt):
+    def forward(self, dt, cube_position: np.ndarray, replay_obs=None):
         """
         Compute the desired torques and apply them to the articulation
 
@@ -82,8 +91,19 @@ class BrownbotPolicy(PolicyController):
 
         """
         if self._policy_counter % self._decimation == 0:
-            obs = self._compute_observation()
+            if replay_obs is None:
+                obs = self._compute_observation(cube_position)
+            else:
+                if self._obs_counter < len(replay_obs):
+                    obs = replay_obs[self._obs_counter]
+                    self._obs_counter += 1
+                else:
+                    return
+            #print("obs: ", obs) # Debugging observation
             self.action = self._compute_action(obs)
+            #print("action raw: ", self.action)
+            #self.action = np.pad(self.action, (0, len(self.default_pos) - len(self.action)), mode="constant")
+            #self.joint_command = self.default_pos + (self.action * self._action_scale)
             self._previous_action = self.action.copy()
         
         # print("shape self.action: ", self.action.shape)
@@ -93,7 +113,80 @@ class BrownbotPolicy(PolicyController):
         # Pad with zeros
         padded_action = np.pad(self.action, (0, len(self.default_pos) - len(self.action)), mode="constant")
 
-        action = ArticulationAction(joint_positions=self.default_pos + (padded_action * self._action_scale))
+        # Create a scaling array: scale first 6 elements, keep the rest unscaled
+        scaling_array = np.ones_like(padded_action)
+        scaling_array[:6] = self._action_scale  # Apply scale only to first 6
+
+        # Apply scaling only to first 6 elements
+        scaled_action = padded_action * scaling_array
+
+        joint_command = self.default_pos + scaled_action
+
+        action = ArticulationAction(joint_positions=joint_command)
+        #action.joint_positions = action.joint_positions[:7]
+        #action.joint_positions[:7] = [0.0,  -1.710e+00, 1.7, 
+        #                                -1.70e+00, -1.7e+00, 0.0226e+00, 0.0] 
+        #action.joint_positions[6] = 1.6
+        #action.joint_positions[0] = -1.000
+        
+        # if action.joint_positions[6] <= 0:
+        #     action.joint_positions[6] = -0.3
+        # else:
+        #     action.joint_positions[6] = 1.7
+        
+        print("actions: ", action)
+        if action.joint_positions[6] >= 1.7:
+            action.joint_positions[6] = 1.7
+
         self.robot.apply_action(action)
+        #print("no apply action")
+
+        
+        #self._previous_action = action.joint_positions[:7].copy()
+
+        #print("actions: ", action)
+        #print("previous action: ", self._previous_action)
+        #print("dof names: ", self.robot.dof_names)
 
         self._policy_counter += 1
+
+    def forward_2(self, dt):
+        """
+        Compute the desired torques and apply them to the articulation
+
+        Argument:
+        dt (float) -- Timestep update in the world.
+
+        """
+
+        start_time = time.time()
+
+        obs = self._compute_observation()
+        #print("obs: ", obs) # Debugging observation
+        self.action = self._compute_action(obs)
+        #print("action raw: ", self.action)
+        #self.action = np.pad(self.action, (0, len(self.default_pos) - len(self.action)), mode="constant")
+        #self.joint_command = self.default_pos + (self.action * self._action_scale)
+            #self._previous_action = self.action.copy()
+        
+        # print("shape self.action: ", self.action.shape)
+        # print("type self.action: ", type(self.action))
+        # print("type default_pose: ", type(self.default_pos))
+        # print("len self.default_pos: ", len(self.default_pos))
+        # Pad with zeros
+        padded_action = np.pad(self.action, (0, len(self.default_pos) - len(self.action)), mode="constant")
+
+        joint_command = self.default_pos + (padded_action * self._action_scale)
+
+        action = ArticulationAction(joint_positions=joint_command)
+        #action.joint_positions = action.joint_positions[:7]
+        #action.joint_positions[:7] = [-1.6043e+00,  1.3710e+00, 7.2097e-01, 
+        #                               1.8880e+00, -1.1930e+00, -3.0226e+00,  3.0927e-01] 
+        self.robot.apply_action(action)
+
+        
+        self._previous_action = action.joint_positions[:7].copy()
+
+        # time delay for real-time evaluation
+        sleep_time = dt - (time.time() - start_time)
+        time.sleep(sleep_time)

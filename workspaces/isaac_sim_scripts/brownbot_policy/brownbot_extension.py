@@ -6,6 +6,7 @@ from isaacsim.examples.interactive.base_sample import BaseSampleUITemplate
 from isaacsim.examples.interactive.brownbot_policy import BrownbotTransfer
 
 
+
 class BrownbotExtension(omni.ext.IExt):
     def on_startup(self, ext_id: str):
         self.example_name = "Brownbot Policy"
