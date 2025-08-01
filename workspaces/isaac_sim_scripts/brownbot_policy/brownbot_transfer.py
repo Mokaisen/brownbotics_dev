@@ -35,12 +35,22 @@ class BrownbotTransfer(BaseSample):
         )
 
         # add a cube for brownbot to pick up
+        # Center position
+        center = np.array([0.5, 0.0, 0.01])
+
+        # Random offsets
+        x_offset = np.random.uniform(-0.1, 0.1)
+        y_offset = np.random.uniform(-0.25, 0.25)
+
+        # Final position
+        position = center + np.array([x_offset, y_offset, 4.5190e-02])
+
         world.scene.add(
             DynamicCuboid(
                 prim_path="/World/random_cube",
                 name="fancy_cube",
-                position=np.array([5.2191e-01, 0.0915e-01, 4.5190e-02]), #[0.5, 0.0, 0.1]
-                scale=np.array([0.0555, 0.0515, 0.0515]),
+                position=np.array(position), #[0.5, 0.0, 0.1]
+                scale=np.array([0.0515, 0.0515, 0.0505]),
                 color=np.array([0, 0, 1.0]),
             )
         )
@@ -107,9 +117,15 @@ class BrownbotTransfer(BaseSample):
         self._world = self.get_world()
         self._cube = self._world.scene.get_object("fancy_cube")
 
+        if self._cube is not None:
+            _, self._cube_initial_orientation = self._cube.get_world_pose()
+
         await self.get_world().play_async()
 
     async def setup_pre_reset(self):
+        self.brownbot._close_gripper = False
+        self.brownbot._clossing_gripper = False
+        self.brownbot._gripper_counter = 0
         return
 
     async def setup_post_reset(self):
@@ -117,6 +133,19 @@ class BrownbotTransfer(BaseSample):
         self.brownbot._close_gripper = False
         self.brownbot._clossing_gripper = False
         self.brownbot._gripper_counter = 0
+        self.brownbot._previous_action = np.zeros(7)
+        self.brownbot._policy_counter = 0
+
+        # Generate new random position for the cube
+        center = np.array([0.5, 0.0, 0.01])
+        x_offset = np.random.uniform(-0.1, 0.1)
+        y_offset = np.random.uniform(-0.25, 0.25)
+        new_position = center + np.array([x_offset, y_offset, 4.5190e-02])
+
+        # Set the cube's new position (keep orientation unchanged)
+        if self._cube is not None:
+            self._cube.set_world_pose(new_position, self._cube_initial_orientation)
+
         await self._world.play_async()
 
     def on_physics_step(self, step_size) -> None:

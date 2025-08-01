@@ -38,7 +38,7 @@ class BrownbotPolicy(PolicyController):
             "/isaac-sim/workspaces/brownbot_rl/logs/skrl/brownbot_lift/2025-06-13_22-21-29_ppo_torch_rewardsToOne/checkpoints/policy_scripted.pt",
             "/isaac-sim/workspaces/brownbot_rl/logs/skrl/brownbot_lift/2025-06-13_22-21-29_ppo_torch_rewardsToOne/params/env.yaml",
         )
-        self._action_scale = 0.2
+        self._action_scale = 0.20
         self._previous_action = np.zeros(7)
         self._policy_counter = 0
         self._obs_counter = 0
@@ -140,6 +140,7 @@ class BrownbotPolicy(PolicyController):
         
         #print("actions: ", action)
         
+        # help gripper to close 
         if contact_sensors[0]>0.02 or contact_sensors[1]>0.02:
             self._close_gripper = True
 
@@ -149,13 +150,13 @@ class BrownbotPolicy(PolicyController):
                 action.joint_positions[6] = 2.0
                 pos_gripper = self.robot.get_joint_positions()[6]
                 print("pose gripper: ", pos_gripper)
-                if pos_gripper < 0.35:
+                if pos_gripper < 0.30:
                     self._clossing_gripper = True
-                elif pos_gripper > 0.43:
+                elif pos_gripper > 0.40:
                     self._clossing_gripper = False
 
         self.robot.apply_action(action)
-        #print("no apply action")
+        print("close gripper: ", self._close_gripper)
 
         
         #self._previous_action = action.joint_positions[:7].copy()
