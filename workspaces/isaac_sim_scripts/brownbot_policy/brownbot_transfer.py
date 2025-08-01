@@ -1,8 +1,13 @@
 from isaacsim.examples.interactive.base_sample import BaseSample
 from isaacsim.core.api.objects import DynamicCuboid
+from isaacsim.sensors.physics import ContactSensor
 
 from isaacsim.examples.interactive.brownbot_policy.brownbot import BrownbotPolicy
 
+from pxr import UsdPhysics, PhysxSchema, Gf, UsdGeom
+from isaacsim.sensors.physics import _sensor
+
+import omni
 import numpy as np
 
 
@@ -35,10 +40,64 @@ class BrownbotTransfer(BaseSample):
                 prim_path="/World/random_cube",
                 name="fancy_cube",
                 position=np.array([5.2191e-01, 0.0915e-01, 4.5190e-02]), #[0.5, 0.0, 0.1]
-                scale=np.array([0.0515, 0.0515, 0.0515]),
+                scale=np.array([0.0555, 0.0515, 0.0515]),
                 color=np.array([0, 0, 1.0]),
             )
         )
+
+        # context = omni.usd.get_context()
+        # self._stage = context.get_stage()
+        # robot_usd_prims = self._stage.GetPrimAtPath("/World/Brownbot/ur5/Robotiq_2F_140_physics_edit/right_inner_pad")
+        # UsdPhysics.CollisionAPI.Apply(robot_usd_prims)
+        # UsdPhysics.MeshCollisionAPI.Apply(robot_usd_prims)
+        # physxCollisionAPI = PhysxSchema.PhysxCollisionAPI.Apply(robot_usd_prims)
+        # PhysxSchema.PhysxContactReportAPI.Apply(robot_usd_prims)
+        
+        # world.scene.add( 
+        #     ContactSensor(
+        #         prim_path="/World/Brownbot/ur5/Robotiq_2F_140_physics_edit/right_inner_pad",
+        #         name="Contact_Sensor_RF",
+        #         frequency=60,
+        #         translation=np.array([0, 0, 0]),
+        #         min_threshold=0,
+        #         max_threshold=10000000,
+        #         radius=-1
+        #     )
+        # )
+
+        # self.contact_forces_LF = ContactSensor(
+        #     prim_path="/World/Brownbot/ur5/Robotiq_2F_140_physics_edit/left_inner_pad",
+        #     name="Contact_Sensor_LF",
+        #     frequency=60,
+        #     translation=np.array([0, 0, 0]),
+        #     min_threshold=0,
+        #     max_threshold=10000000,
+        #     radius=-1
+        # )
+
+        # # Add Contact Sensor
+        # omni.usd.get_context().open_stage_async("/isaac-sim/workspaces/isaac_sim_scene/brownbot_08.usd")
+        # omni.kit.app.get_app().next_update_async()
+
+        self.meters_per_unit = UsdGeom.GetStageMetersPerUnit(omni.usd.get_context().get_stage())
+
+        # self.sensor_offsets = [Gf.Vec3d(40, 0, 0), Gf.Vec3d(40, 0, 0), Gf.Vec3d(40, 0, 0), Gf.Vec3d(40, 0, 0)]
+        # self.color = [(1, 0, 0, 1), (0, 1, 0, 1), (0, 0, 1, 1), (1, 1, 0, 1)]
+        # self.sensorGeoms = []
+
+        # result, sensor = omni.kit.commands.execute(
+        #     "IsaacSensorCreateContactSensor",
+        #     path="/sensor",
+        #     parent="/World/Brownbot/ur5/Robotiq_2F_140_physics_edit/left_inner_pad",
+        #     min_threshold=0,
+        #     max_threshold=10000000,
+        #     color=self.color[0],
+        #     radius=0.12,
+        #     sensor_period=-1,
+        #     translation=self.sensor_offsets[0],
+        # )
+
+        self._cs = _sensor.acquire_contact_sensor_interface()
 
         return
 
@@ -47,6 +106,7 @@ class BrownbotTransfer(BaseSample):
         self.get_world().add_physics_callback("physics_step", callback_fn=self.on_physics_step)
         self._world = self.get_world()
         self._cube = self._world.scene.get_object("fancy_cube")
+
         await self.get_world().play_async()
 
     async def setup_pre_reset(self):
@@ -54,6 +114,9 @@ class BrownbotTransfer(BaseSample):
 
     async def setup_post_reset(self):
         self._physics_ready = False
+        self.brownbot._close_gripper = False
+        self.brownbot._clossing_gripper = False
+        self.brownbot._gripper_counter = 0
         await self._world.play_async()
 
     def on_physics_step(self, step_size) -> None:
@@ -61,8 +124,19 @@ class BrownbotTransfer(BaseSample):
         #print("cube position: ", cube_position)
         #print("cube_position type: ", type(cube_position))
 
+        #value_contact_LF = self.contact_forces_LF.get_current_frame()
+        #value_contact_RF = self.contact_forces_RF.get_current_frame()
+        #print("value_contact_LF: ", value_contact_LF)
+        #print("value_contact_RF: ", value_contact_RF)
+
+        reading_LF = self._cs.get_sensor_reading("/World/Brownbot/ur5/Robotiq_2F_140_physics_edit/left_inner_pad" + "/Contact_Sensor")
+        reading_RF = self._cs.get_sensor_reading("/World/Brownbot/ur5/Robotiq_2F_140_physics_edit/right_inner_pad" + "/Contact_Sensor")
+        contact_sensors = [reading_LF.value, reading_RF.value]
+        #print("contact_sensors: ", contact_sensors)
+
         if self._physics_ready:
-            self.brownbot.forward(dt=step_size, cube_position=cube_position, replay_obs=None)
+            self.brownbot.forward(dt=step_size, cube_position=cube_position, 
+                                  contact_sensors=contact_sensors, replay_obs=None)
             #print("physics step")
         else:
             self._physics_ready = True

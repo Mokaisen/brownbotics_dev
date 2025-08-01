@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, List
 
 import numpy as np
 from isaacsim.robot.policy.examples.controllers import PolicyController
@@ -30,7 +30,7 @@ class BrownbotPolicy(PolicyController):
         """
 
         if usd_path == None: 
-            usd_path = "/isaac-sim/workspaces/isaac_sim_scene/brownbot_07.usd"
+            usd_path = "/isaac-sim/workspaces/isaac_sim_scene/brownbot_08.usd"
         
         super().__init__(name, prim_path, root_path, usd_path, position, orientation)
 
@@ -42,6 +42,10 @@ class BrownbotPolicy(PolicyController):
         self._previous_action = np.zeros(7)
         self._policy_counter = 0
         self._obs_counter = 0
+
+        self._close_gripper = False
+        self._clossing_gripper = False
+        self._gripper_counter = 0 
 
     def _compute_observation(self, cube_position:np.ndarray ):
         """
@@ -82,7 +86,7 @@ class BrownbotPolicy(PolicyController):
 
         return obs
 
-    def forward(self, dt, cube_position: np.ndarray, replay_obs=None):
+    def forward(self, dt, cube_position: np.ndarray, contact_sensors: List, replay_obs=None):
         """
         Compute the desired torques and apply them to the articulation
 
@@ -90,7 +94,7 @@ class BrownbotPolicy(PolicyController):
         dt (float) -- Timestep update in the world.
 
         """
-        if self._policy_counter % self._decimation == 0:
+        if self._policy_counter % self._decimation == 0 and self._clossing_gripper == False:
             if replay_obs is None:
                 obs = self._compute_observation(cube_position)
             else:
@@ -125,8 +129,8 @@ class BrownbotPolicy(PolicyController):
         action = ArticulationAction(joint_positions=joint_command)
         #action.joint_positions = action.joint_positions[:7]
         #action.joint_positions[:7] = [0.0,  -1.710e+00, 1.7, 
-        #                                -1.70e+00, -1.7e+00, 0.0226e+00, 0.0] 
-        #action.joint_positions[6] = 1.6
+        #                               -1.70e+00, -1.7e+00, 0.0226e+00, 0.0] 
+        #action.joint_positions[6] = 1.7
         #action.joint_positions[0] = -1.000
         
         # if action.joint_positions[6] <= 0:
@@ -134,9 +138,21 @@ class BrownbotPolicy(PolicyController):
         # else:
         #     action.joint_positions[6] = 1.7
         
-        print("actions: ", action)
-        if action.joint_positions[6] >= 1.7:
-            action.joint_positions[6] = 1.7
+        #print("actions: ", action)
+        
+        if contact_sensors[0]>0.02 or contact_sensors[1]>0.02:
+            self._close_gripper = True
+
+        if self._close_gripper:
+            self._gripper_counter += 1
+            if self._gripper_counter > 30:
+                action.joint_positions[6] = 2.0
+                pos_gripper = self.robot.get_joint_positions()[6]
+                print("pose gripper: ", pos_gripper)
+                if pos_gripper < 0.35:
+                    self._clossing_gripper = True
+                elif pos_gripper > 0.43:
+                    self._clossing_gripper = False
 
         self.robot.apply_action(action)
         #print("no apply action")
