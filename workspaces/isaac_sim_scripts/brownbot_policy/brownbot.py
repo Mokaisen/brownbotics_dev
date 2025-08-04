@@ -116,6 +116,7 @@ class BrownbotPolicy(PolicyController):
         # print("len self.default_pos: ", len(self.default_pos))
         # Pad with zeros
         padded_action = np.pad(self.action, (0, len(self.default_pos) - len(self.action)), mode="constant")
+        padded_action[6] = padded_action[6] * (-1.0)
 
         # Create a scaling array: scale first 6 elements, keep the rest unscaled
         scaling_array = np.ones_like(padded_action)
@@ -130,7 +131,7 @@ class BrownbotPolicy(PolicyController):
         #action.joint_positions = action.joint_positions[:7]
         #action.joint_positions[:7] = [0.0,  -1.710e+00, 1.7, 
         #                               -1.70e+00, -1.7e+00, 0.0226e+00, 0.0] 
-        #action.joint_positions[6] = 1.7
+        #action.joint_positions[6] = 1.0
         #action.joint_positions[0] = -1.000
         
         # if action.joint_positions[6] <= 0:
@@ -140,28 +141,28 @@ class BrownbotPolicy(PolicyController):
         
         #print("actions: ", action)
         
-        # help gripper to close 
-        if contact_sensors[0]>0.02 or contact_sensors[1]>0.02:
-            self._close_gripper = True
+        # # help gripper to close 
+        # if contact_sensors[0]>0.02 or contact_sensors[1]>0.02:
+        #     self._close_gripper = True
 
-        if self._close_gripper:
-            self._gripper_counter += 1
-            if self._gripper_counter > 30:
-                action.joint_positions[6] = 2.0
-                pos_gripper = self.robot.get_joint_positions()[6]
-                print("pose gripper: ", pos_gripper)
-                if pos_gripper < 0.30:
-                    self._clossing_gripper = True
-                elif pos_gripper > 0.40:
-                    self._clossing_gripper = False
+        # if self._close_gripper:
+        #     self._gripper_counter += 1
+        #     if self._gripper_counter > 30:
+        #         action.joint_positions[6] = 2.0
+        #         pos_gripper = self.robot.get_joint_positions()[6]
+        #         print("pose gripper: ", pos_gripper)
+        #         if pos_gripper < 0.30:
+        #             self._clossing_gripper = True
+        #         elif pos_gripper > 0.40:
+        #             self._clossing_gripper = False
 
         self.robot.apply_action(action)
-        print("close gripper: ", self._close_gripper)
+        #print("close gripper: ", self._close_gripper)
 
         
         #self._previous_action = action.joint_positions[:7].copy()
 
-        #print("actions: ", action)
+        print("actions: ", action)
         #print("previous action: ", self._previous_action)
         #print("dof names: ", self.robot.dof_names)
 
