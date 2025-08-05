@@ -160,7 +160,7 @@ class BrownbotPolicy(PolicyController):
 
         #cube distance to target position 
         distance_to_target = np.linalg.norm(self.target_pose_np - cube_position)
-        print("distance to target: ", distance_to_target)
+        #print("distance to target: ", distance_to_target)
 
         if distance_to_target > 0.36:
             self.robot.apply_action(action)
