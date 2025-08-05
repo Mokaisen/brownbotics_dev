@@ -123,7 +123,7 @@ class PolicyController(BaseController):
             max_vel.insert(6, 4.2)
             max_effort[7] = max_effort[6]
             max_vel[7] = max_vel[6]
-            max_effort[0:6] = [100]*6
+            max_effort[0:6] = [120]*6
             max_vel[0:6] = [3.0]*6
 
             gripper_effort = 30.0 # 3.0
