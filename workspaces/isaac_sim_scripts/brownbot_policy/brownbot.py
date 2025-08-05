@@ -47,6 +47,8 @@ class BrownbotPolicy(PolicyController):
         self._clossing_gripper = False
         self._gripper_counter = 0 
 
+        self.target_pose_np = np.array([5.5306e-01,  1.9388e-01,  5.8111e-01]) # x, y, z
+
     def _compute_observation(self, cube_position:np.ndarray ):
         """
         Compute the observation vector for the policy
@@ -78,7 +80,7 @@ class BrownbotPolicy(PolicyController):
         # Object target pose
         # TODO how to access the mdp.generated_commands
         # obs[31:38] = [0.5,0,0.4,0,0,0,0]
-        obs[31:38] = [5.5306e-01,  1.9388e-01,  2.8111e-01,  8.4452e-04,
+        obs[31:38] = self.target_pose_np.tolist() +  [8.4452e-04,
                       7.0711e-01, -2.8151e-04,  7.0711e-01]
 
         # previous action
@@ -116,7 +118,7 @@ class BrownbotPolicy(PolicyController):
         # print("len self.default_pos: ", len(self.default_pos))
         # Pad with zeros
         padded_action = np.pad(self.action, (0, len(self.default_pos) - len(self.action)), mode="constant")
-        padded_action[6] = padded_action[6] * (-1.0)
+        padded_action[6] = padded_action[6] * (-1.2)
 
         # Create a scaling array: scale first 6 elements, keep the rest unscaled
         scaling_array = np.ones_like(padded_action)
@@ -156,12 +158,17 @@ class BrownbotPolicy(PolicyController):
         #         elif pos_gripper > 0.40:
         #             self._clossing_gripper = False
 
-        self.robot.apply_action(action)
-        #print("close gripper: ", self._close_gripper)
+        #cube distance to target position 
+        distance_to_target = np.linalg.norm(self.target_pose_np - cube_position)
+        #print("distance to target: ", distance_to_target)
 
+        if distance_to_target > 0.36:
+            self.robot.apply_action(action)
+        #print("close gripper: ", self._close_gripper)
         
         #self._previous_action = action.joint_positions[:7].copy()
 
+        #print("finger_joint pos: ", self.robot.get_joint_positions()[6])
         #print("actions: ", action)
         #print("previous action: ", self._previous_action)
         #print("dof names: ", self.robot.dof_names)
