@@ -103,13 +103,13 @@ class PolicyController(BaseController):
             self.policy_env_params, self.robot.dof_names
         )
         if set_gains:
-            stiffness.insert(6,0.1125) #   30.0
-            damping.insert(6,0.001)    # 0.3 
+            stiffness.insert(6,30.0) #    0.1125
+            damping.insert(6,0.3)    #  0.001
             stiffness[7] = stiffness[6] # 30.0 
             damping[7] = damping[6]  # 0.3
             #reduce stiffness and damping for the gripper
-            gripper_stiffness = 0.0 # 0.5
-            gripper_damping = 0.0 # 0.1
+            gripper_stiffness = 0.5 # 0.0
+            gripper_damping = 0.1 # 0.0
 
             for i in range(8,len(stiffness)):
                 stiffness[i] = gripper_stiffness
@@ -119,15 +119,15 @@ class PolicyController(BaseController):
             print("damping: ", damping)
             self.robot._articulation_view.set_gains(stiffness, damping)
         if set_limits:
-            max_effort.insert(6, 10.0)
-            max_vel.insert(6, 2.2)
+            max_effort.insert(6, 150.0)
+            max_vel.insert(6, 4.2)
             max_effort[7] = max_effort[6]
             max_vel[7] = max_vel[6]
             max_effort[0:6] = [150]*6
             max_vel[0:6] = [6.0]*6
 
-            gripper_effort = 10.0 # 3.0
-            gripper_vel = 2.2 # 0.2
+            gripper_effort = 30.0 # 3.0
+            gripper_vel = 4.2 # 0.2
 
             for i in range(8,len(max_effort)):
                 max_effort[i] = gripper_effort
