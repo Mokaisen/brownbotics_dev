@@ -129,9 +129,9 @@ class BrownbotPolicy(PolicyController):
 
         action = ArticulationAction(joint_positions=joint_command)
         #action.joint_positions = action.joint_positions[:7]
-        #action.joint_positions[:7] = [0.0,  -1.710e+00, 1.7, 
-        #                               -1.70e+00, -1.7e+00, 0.0226e+00, 0.0] 
-        #action.joint_positions[6] = 1.0
+        action.joint_positions[:7] = [0.0,  -1.710e+00, 1.7, 
+                                       -1.70e+00, -1.7e+00, 0.0226e+00, 0.0] 
+        action.joint_positions[6] = 1.0
         #action.joint_positions[0] = -1.000
         
         # if action.joint_positions[6] <= 0:
@@ -162,7 +162,7 @@ class BrownbotPolicy(PolicyController):
         
         #self._previous_action = action.joint_positions[:7].copy()
 
-        print("actions: ", action)
+        #print("actions: ", action)
         #print("previous action: ", self._previous_action)
         #print("dof names: ", self.robot.dof_names)
 
