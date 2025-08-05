@@ -162,8 +162,8 @@ class BrownbotPolicy(PolicyController):
         
         #self._previous_action = action.joint_positions[:7].copy()
 
-        print("finger_joint pos: ", self.robot.get_joint_positions()[6])
-        print("actions: ", action)
+        #print("finger_joint pos: ", self.robot.get_joint_positions()[6])
+        #print("actions: ", action)
         #print("previous action: ", self._previous_action)
         #print("dof names: ", self.robot.dof_names)
 
