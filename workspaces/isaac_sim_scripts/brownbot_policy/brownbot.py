@@ -116,7 +116,7 @@ class BrownbotPolicy(PolicyController):
         # print("len self.default_pos: ", len(self.default_pos))
         # Pad with zeros
         padded_action = np.pad(self.action, (0, len(self.default_pos) - len(self.action)), mode="constant")
-        padded_action[6] = padded_action[6] * (-1.0)
+        padded_action[6] = padded_action[6] * (-1.2)
 
         # Create a scaling array: scale first 6 elements, keep the rest unscaled
         scaling_array = np.ones_like(padded_action)
