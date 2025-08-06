@@ -35,8 +35,8 @@ class BrownbotPolicy(PolicyController):
         super().__init__(name, prim_path, root_path, usd_path, position, orientation)
 
         self.load_policy(
-            "/isaac-sim/workspaces/brownbot_rl/logs/skrl/brownbot_lift/2025-06-13_22-21-29_ppo_torch_rewardsToOne/checkpoints/policy_scripted.pt",
-            "/isaac-sim/workspaces/brownbot_rl/logs/skrl/brownbot_lift/2025-06-13_22-21-29_ppo_torch_rewardsToOne/params/env.yaml",
+            "/isaac-sim/data_brownbot_dev/robots/brownbot/models/policy_scripted.pt",
+            "/isaac-sim/data_brownbot_dev/robots/brownbot/models/params/env.yaml"        
         )
         self._action_scale = 0.20
         self._previous_action = np.zeros(7)
