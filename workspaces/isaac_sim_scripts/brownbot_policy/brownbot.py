@@ -30,7 +30,7 @@ class BrownbotPolicy(PolicyController):
         """
 
         if usd_path == None: 
-            usd_path = "/isaac-sim/workspaces/isaac_sim_scene/brownbot_08.usd"
+            usd_path = "/isaac-sim/workspaces/isaac_sim_scene/brownbot_07.usd"
         
         super().__init__(name, prim_path, root_path, usd_path, position, orientation)
 

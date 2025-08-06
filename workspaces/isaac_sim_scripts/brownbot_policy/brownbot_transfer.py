@@ -107,7 +107,7 @@ class BrownbotTransfer(BaseSample):
         #     translation=self.sensor_offsets[0],
         # )
 
-        self._cs = _sensor.acquire_contact_sensor_interface()
+        #self._cs = _sensor.acquire_contact_sensor_interface()
 
         return
 
@@ -158,9 +158,10 @@ class BrownbotTransfer(BaseSample):
         #print("value_contact_LF: ", value_contact_LF)
         #print("value_contact_RF: ", value_contact_RF)
 
-        reading_LF = self._cs.get_sensor_reading("/World/Brownbot/ur5/Robotiq_2F_140_physics_edit/left_inner_pad" + "/Contact_Sensor")
-        reading_RF = self._cs.get_sensor_reading("/World/Brownbot/ur5/Robotiq_2F_140_physics_edit/right_inner_pad" + "/Contact_Sensor")
-        contact_sensors = [reading_LF.value, reading_RF.value]
+        #reading_LF = self._cs.get_sensor_reading("/World/Brownbot/ur5/Robotiq_2F_140_physics_edit/left_inner_pad" + "/Contact_Sensor")
+        #reading_RF = self._cs.get_sensor_reading("/World/Brownbot/ur5/Robotiq_2F_140_physics_edit/right_inner_pad" + "/Contact_Sensor")
+        #contact_sensors = [reading_LF.value, reading_RF.value]
+        contact_sensors = [0,0]
         #print("contact_sensors: ", contact_sensors)
 
         if self._physics_ready:
