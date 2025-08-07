@@ -103,39 +103,39 @@ class PolicyController(BaseController):
             self.policy_env_params, self.robot.dof_names
         )
         if set_gains:
-            stiffness.insert(6,30.0) #    0.1125
-            damping.insert(6,0.3)    #  0.001
-            stiffness[7] = stiffness[6] # 30.0 
-            damping[7] = damping[6]  # 0.3
+            #stiffness.insert(6,30.0) #    0.1125
+            #damping.insert(6,0.3)    #  0.001
+            #stiffness[7] = stiffness[6] # 30.0 
+            #damping[7] = damping[6]  # 0.3
             #reduce stiffness and damping for the gripper
-            gripper_stiffness = 0.5 # 0.0
-            gripper_damping = 0.1 # 0.0
+            #gripper_stiffness = 0.5 # 0.0
+            #gripper_damping = 0.1 # 0.0
 
-            for i in range(8,len(stiffness)):
-                stiffness[i] = gripper_stiffness
-                damping[i] = gripper_damping
+            #for i in range(8,len(stiffness)):
+            #    stiffness[i] = gripper_stiffness
+            #    damping[i] = gripper_damping
 
-            print("stiffness: ", stiffness)
-            print("damping: ", damping)
+            #print("stiffness: ", stiffness)
+            #print("damping: ", damping)
             self.robot._articulation_view.set_gains(stiffness, damping)
         if set_limits:
-            max_effort.insert(6, 150.0)
-            max_vel.insert(6, 4.2)
-            max_effort[7] = max_effort[6]
-            max_vel[7] = max_vel[6]
-            max_effort[0:6] = [120]*6
-            max_vel[0:6] = [3.0]*6
+            #max_effort.insert(6, 150.0)
+            #max_vel.insert(6, 4.2)
+            #max_effort[7] = max_effort[6]
+            #max_vel[7] = max_vel[6]
+            #max_effort[0:6] = [120]*6
+            #max_vel[0:6] = [3.0]*6
 
-            gripper_effort = 30.0 # 3.0
-            gripper_vel = 4.2 # 0.2
+            #gripper_effort = 30.0 # 3.0
+            #gripper_vel = 4.2 # 0.2
 
-            for i in range(8,len(max_effort)):
-                max_effort[i] = gripper_effort
-                max_vel[i] = gripper_vel
+            #for i in range(8,len(max_effort)):
+            #    max_effort[i] = gripper_effort
+            #    max_vel[i] = gripper_vel
 
 
-            print("max_effort: ", max_effort)
-            print("max_vel: ", max_vel)
+            #print("max_effort: ", max_effort)
+            #print("max_vel: ", max_vel)
             self.robot._articulation_view.set_max_efforts(max_effort)
             self.robot._articulation_view.set_max_joint_velocities(max_vel)
         if set_articulation_props:
