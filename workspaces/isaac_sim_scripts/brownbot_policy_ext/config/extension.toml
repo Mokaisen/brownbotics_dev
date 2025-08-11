@@ -3,23 +3,41 @@ reloadable = true
 order = 0
 
 [package]
-version = "1.0.1"
+version = "1.0.0"
 category = "Simulation"
 title = "brownbot_policy_ext"
 description = "An isaac lab policy is imported into isaac sim for picking a cube "
-authors = ["NVIDIA"]
+authors = ["Cesar Molano"]
 repository = ""
-keywords = []
+keywords = ["isaac", "samples", "manipulation"]
 changelog = "docs/CHANGELOG.md"
 readme = "docs/README.md"
-preview_image = "data/preview.png"
 icon = "data/icon.png"
-
+preview_image = "data/preview.png"
+writeTarget.kit = true
 
 [dependencies]
-"omni.kit.uiapp" = {}
-"isaacsim.gui.components" = {}
 "isaacsim.core.api" = {}
+"isaacsim.core.prims" = {}
+"isaacsim.cortex.behaviors" = {}
+"isaacsim.cortex.framework" = {}
+"isaacsim.examples.browser" = {}
+"isaacsim.gui.components" = {}
+"isaacsim.robot.manipulators" = {}
+"isaacsim.robot.manipulators.examples" = {}
+"isaacsim.robot_motion.motion_generation" = {}
+"isaacsim.sensors.physics" = {}
+"isaacsim.core.nodes" = {}
+
+"isaacsim.examples.extension" = {}
+"omni.graph.action" = {}
+"omni.graph.nodes" = {}
+"omni.graph.core" = {}
+"omni.isaac.dynamic_control" = {}
+"isaacsim.storage.native" = {}
+"isaacsim.robot.wheeled_robots" = {}
+"omni.kit.uiapp" = {}
+"omni.physx" = {}
 
 [[python.module]]
 name = "brownbot_policy_ext_python"

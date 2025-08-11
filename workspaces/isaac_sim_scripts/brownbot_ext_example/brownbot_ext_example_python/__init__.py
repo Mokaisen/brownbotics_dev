@@ -1,4 +1,4 @@
-# Copyright (c) 2018-2024, NVIDIA CORPORATION. All rights reserved.
+# Copyright (c) 2022-2024, NVIDIA CORPORATION. All rights reserved.
 #
 # NVIDIA CORPORATION and its licensors retain all intellectual property
 # and proprietary rights in and to this software, related documentation
@@ -6,11 +6,4 @@
 # distribution of this software and related documentation without an express
 # license agreement from NVIDIA CORPORATION is strictly prohibited.
 #
-
-# NOTE: Import here your extension examples to be propagated to ISAAC SIM Extensions startup
-
-from .policy_controller import *
-from .config_loader import *
-
-from .brownbot_transfer import BrownbotTransfer
-from .brownbot_extension import BrownbotExtension
+from .extension import *
