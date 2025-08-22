@@ -18,3 +18,7 @@
 [submodule "docker/isaac-ros-v3/IsaacSim"]
 	path = docker/isaac-ros-v3/IsaacSim
 	url = git@github.com:Mokaisen/IsaacSim.git
+[submodule "docker/isaac-ros-v3/IsaacLab"]
+	path = docker/isaac-ros-v3/IsaacLab
+	url = git@github.com:Mokaisen/IsaacLab.git
+	branch = v2.2.0-branch
