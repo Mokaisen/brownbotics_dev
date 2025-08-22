@@ -95,7 +95,7 @@ docker-compose build --no-cache isaac-ros
 
 Some of the dockerfile and docker compose configuration variables are organized in the .env file 
 
-## Isaac-sim 4.5
+## Isaac-sim 4.5 & Isaac-lab 2.1.0
 
 The dockerfile for this container is in the ./docker/isaac-ros-v2/Dockerfile location
 
@@ -113,6 +113,24 @@ docker compose build --no-cache isaac-ros-v2
 
 The variables used in the docker compose file and the dockerfile are included in the .env.isaac4.5 file
 
+## Isaac-sim 5.0 & Isaac-lab 2.2.0
+
+The dockerfile for this container is in the ./docker/isaac-ros-v3/Dockerfile location
+
+This container can be built by running the following docker compose commands
+
+```
+docker compose build isaac-ros-v3
+```
+
+or without cache
+
+```
+docker compose build --no-cache isaac-ros-v3
+```
+
+The variables used in the docker compose file and the dockerfile are included in the .env.isaac5.0 file
+
 # Running the containers 
 
 ## Isaac-sim 4.2
@@ -121,13 +139,19 @@ The variables used in the docker compose file and the dockerfile are included in
 docker-compose run isaac-ros
 ```
 
-## Isaac-sim 4.5
+## Isaac-sim 4.5 with Isaac-lab 2.1.0
 
 ```
 docker compose up -d isaac-ros-v2
 ```
 
 Detach mode (-d) is required to avoid getting inside the container in the current terminal
+
+## Isaac-sim 5.0 with Isaac-lab 2.2.0
+
+```
+docker compose up -d isaac-ros-v3
+```
 
 # Execute Normal Inverse Kinematics ROS2 Package 
 
@@ -168,7 +192,7 @@ ros2 run brownbot_ik ur5_isaac_ros2
 ros2 run arm_move1 brownbot_ik_seq_node
 ```
 
-# Train and Play in Isaac Lab 4.5
+# Train and Play in Isaac Lab 4.5 - 5.0
 
 The robot package needs to be installed: 
 
