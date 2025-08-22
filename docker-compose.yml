@@ -105,3 +105,31 @@ services:
     shm_size: "2g"
     stdin_open: true
     tty: true
+
+  isaac-ros-v3:
+    build:
+      context: ./docker/isaac-ros-v3
+      dockerfile: Dockerfile
+      args:
+        ACCEPT_EULA: "Yes"
+    image: isaac-sim:5.0
+    container_name: isaac-ros-v3
+    runtime: nvidia
+    environment:
+      - ACCEPT_EULA=Y
+      - PRIVACY_CONSENT=Y
+      - NVIDIA_DRIVER_CAPABILITIES=all
+      - NVIDIA_VISIBLE_DEVICES=all
+      - OMNI_KIT_ALLOW_ROOT=1
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [ gpu ]
+    volumes:
+      - ./docker/isaac-ros-v3/IsaacSim/source:/workspace/isaacsim/source
+    restart: "no"
+    stdin_open: true
+    tty: true
