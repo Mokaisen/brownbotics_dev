@@ -15,3 +15,7 @@
 [submodule "workspaces/brownbot_rl"]
 	path = workspaces/brownbot_rl
 	url = git@github.com:Mokaisen/brownbot_rl.git
+[submodule "docker/isaac-ros-v3/IsaacLab"]
+	path = docker/isaac-ros-v3/IsaacLab
+	url = git@github.com:Mokaisen/IsaacLab.git
+	branch = v2.2.0-branch
