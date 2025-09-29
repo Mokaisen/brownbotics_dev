@@ -129,6 +129,11 @@ class BrownbotTransfer(BaseSample):
         return
 
     async def setup_post_reset(self):
+        # This is a function you would override in your extension
+        # Add your custom physics callback here
+        #this needs to be added for isaac sim 5.0
+        self.get_world().add_physics_callback("physics_step", callback_fn=self.on_physics_step)
+
         self._physics_ready = False
         self.brownbot._close_gripper = False
         self.brownbot._clossing_gripper = False
