@@ -3,7 +3,7 @@ Development repository for brownbot
 
 # Preliminary results
 
-Robot has learnt by itself to reach the object and grasp the object, but it still is not reaching the final goal location. The development was done using isaac sim to create the robot and isaac lab for training the robot using PPO algorithm for reinforcement learning.
+Robot has learnt to grasp objects that are inside a bin. When the object's geometry is too different the policy is still struggling to grasp the object. The development was done using isaac sim to create the robot and isaac lab for training the robot using PPO algorithm for reinforcement learning.
 
 Training:
 
@@ -11,9 +11,9 @@ Training:
 
 Result:
 
-![Result gif](media/Result_0604.png)
+![Result gif](media/Result_1001.png)
 
-[▶️ Watch the full video on YouTube](https://www.youtube.com/watch?v=Y8VAhJ8WY1Y)
+[▶️ Watch the full video on YouTube](https://www.youtube.com/watch?v=9fl4bt3pWNE)
 
 Inverse Kinematics using ROS2 Humble:
 
@@ -153,7 +153,7 @@ Detach mode (-d) is required to avoid getting inside the container in the curren
 docker compose up -d isaac-ros-v3
 ```
 
-# Execute Normal Inverse Kinematics ROS2 Package 
+# Execute Inverse Kinematics ROS2 Package 
 
 This solution is based in the package from: https://github.com/caiobarrosv/ur5_isaac_simulation 
 
