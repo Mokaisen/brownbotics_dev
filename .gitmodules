@@ -19,3 +19,6 @@
 	path = docker/isaac-ros-v3/IsaacLab
 	url = git@github.com:Mokaisen/IsaacLab.git
 	branch = v2.2.0-branch
+[submodule "workspaces/third_party/skrl"]
+	path = workspaces/third_party/skrl
+	url = git@github.com:Mokaisen/skrl.git
