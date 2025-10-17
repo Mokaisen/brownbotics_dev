@@ -13,27 +13,13 @@ Result:
 
 ![Result gif](media/Result_1001.png)
 
-[▶️ Watch the full video on YouTube](https://www.youtube.com/watch?v=9fl4bt3pWNE)
+[▶️ Video Last Results](https://youtu.be/wLncGYiXjyk)
+
+[▶️ Video Hackhaton LycheeAI-Revel](https://www.youtube.com/watch?v=9fl4bt3pWNE)
 
 Inverse Kinematics using ROS2 Humble:
 
 ![Result gif](media/normal_ik_seq.gif)
-
-# Intermediate Behaviors During Tuning
-
-During the adjustment of the reward terms, we notice two interesting behaviors that can be seen in the following youtube links: 
-
-## Push the object
-
-Using a weight of 10 in the contact reward of the gripper, the robots learnt to push the object to increase the contact with the object: 
-
-[▶️ Video of the pushing behavior](https://www.youtube.com/watch?v=fsddJXXTWxI)
-
-## Push back and forth  
-
-Reducing the weight of the contact sensor to 5 makes the robot learnt to push the object back and forth: 
-
-[▶️ Video of the robot pushing back and forth the object](https://youtu.be/f3k7dY1wAUk?si=bCvuTKZ2xZR0PHGU)
 
 # Install IsaacLab for isaac sim 4.2
 
